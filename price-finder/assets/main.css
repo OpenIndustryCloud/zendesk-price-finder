@@ -1,0 +1,26 @@
+#content td {
+	padding-top: 2px;
+}
+
+.data-field {
+  font-size: 14px;
+}
+
+.data-value {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.container{
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+
+.price-finder .list-group-item{
+	border:none;
+	padding:5px 15px;
+}
+.price-link a, a:hover, a:active{
+	color:black;
+	text-decoration:underline;
+}
