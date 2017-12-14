@@ -1,0 +1,150 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://cdn.jsdelivr.net/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/handlebarsjs/4.0.8/handlebars.min.js"></script>
+<script type="text/javascript" src="https://assets.zendesk.com/apps/sdk/2.0/zaf_sdk.js"></script>
+ 
+<link href="main.css" rel="stylesheet">
+
+
+<div class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:block">
+  <div class="modal-dialog">
+	<div class="modal-content">
+	  <div class="modal-body">
+		<div class="tab-content">
+		<div id="RenderedSection" class="tab-pane fade active in">
+			<div id="RenderedResponseDiv" class="well-R">
+				<div id="displayProdList"></div>
+				<div class="hidden" id="displayProd"></div>
+			</div>
+		</div>
+	</div>	
+	  </div>
+	</div>
+  </div>
+</div>
+
+    <script id="requester-template" type="text/x-handlebars-template">
+	<div>
+	<a type="button" href="#" onclick="backtoProdList()"><h4>Back to list of Products</h4></a>
+	</div>
+		<table class="table table-bordered">
+			<thead>
+				<th class="table-head">Item Image</th>
+				<th class="table-head">Item Descripton</th>
+				<th class="table-head">Item Price</th>
+				<th class="table-head">Price Excess</th>
+				<th class="table-head">Generate Amazon Voucher</th>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="table-col col-md-3">
+						<a target="_blank" href="{{selectedProd.itemPageUrl}}">
+							<img src="{{selectedProd.itemImage}}" width="120" height="100">
+						</a>
+					</td>
+					<td class="table-col col-md-3">
+						<div class="product-title">
+							<h3>{{selectedProd.itemTitle}}</h3>
+						</div>
+					</td>
+					<td class="table-col col-md-2">{{selectedProd.itemPrice}}</td> 
+					<td class="table-col col-md-1">TBD</td> 
+					<td class="table-col col-md-3"><button type="button" onclick="generateVoucher()" class="btn btn-secondary" id="pop{{@index}}">Generate</button></td> 
+				</tr>
+			</tbody>
+		</table>
+	</script>
+
+	<script id="requester-template2" type="text/x-handlebars-template">
+				<table class="table table-bordered">
+				<thead>
+					<th class="table-head">Item Image</th>
+					<th class="table-head">Item Descripton</th>
+					<th class="table-head">Item Price</th>
+					<th class="table-head">Price Excess</th>
+					<th class="table-head">Select Item</th>
+				</thead>
+					<tbody>
+					{{#each myArray}}
+						<tr>
+							<td class="table-col col-md-3">
+								<a target="_blank" href="{{itemPageUrl}}">
+									<img src="{{itemImage}}" width="120" height="100">
+								</a>
+							</td>
+							<td class="table-col col-md-3">
+								<div class="product-title">
+									<h3>{{itemTitle}}</h3>
+								</div>
+							</td>
+							<td class="table-col col-md-2">{{itemPrice}}</td> 
+							<td class="table-col col-md-2">TBD</td> 
+							<td class="table-col col-md-2"><button type="button" onclick="prodSelected({{@index}})" class="btn btn-secondary" id="pop{{@index}}">Select</button></td> 
+						</tr>
+					{{/each}}	
+					</tbody>
+				</table>
+	</script>
+
+	<script>					
+		$(function() {
+			
+			var client = ZAFClient.init();
+			client.invoke('resize', { width: '1000px', height: '450px'});
+			var myArray = JSON.parse(sessionStorage.getItem('myArray'));
+			var requester_data = {
+				'myArray': myArray
+			};			
+			var source = $("#requester-template2").html();		  
+			var template = Handlebars.compile(source);
+			var html2 = template(requester_data);
+			$("#displayProdList").html(html2);
+			/*
+    		client.on('modal.close', function() {
+				console.log("modal closed");
+				var myArray = JSON.parse(sessionStorage.getItem('myArray'));
+				
+				var requester_data = {
+					 'myArray': myArray
+				};
+				//console.log("requester_data = " + requester_data);
+				var source = $("#requester-template").html();
+				//console.log("source = " + source);
+				var template = Handlebars.compile(source);
+				//console.log("template = " + template);
+				var html = template(requester_data);
+				//var mks = document.getElementsByClassName("mohit");
+				//console.log(mks);
+				$("#displayProdList").html(html);
+			});*/
+			
+		});
+		
+		function prodSelected(index){
+				var myArray = JSON.parse(sessionStorage.getItem('myArray'));
+				var selectedProd = myArray[index];		
+				sessionStorage.setItem('selectedProd',JSON.stringify(selectedProd));
+				var client = ZAFClient.init();
+				client.invoke('destroy');
+				var requester_data = {
+					 'selectedProd': selectedProd
+				};
+				var source = $("#requester-template").html();
+				var template = Handlebars.compile(source);
+				var html = template(requester_data);
+				$("#displayProd").html(html);				
+				$("#displayProd").removeClass("hidden");
+				$("#displayProdList").addClass("hidden");
+		}
+		
+		function backtoProdList(){
+			$("#displayProd").addClass("hidden");
+			$("#displayProdList").removeClass("hidden");
+		}
+		
+		function generateVoucher(){
+			$("#displayProd").addClass("hidden");
+		}
+		
+	</script>

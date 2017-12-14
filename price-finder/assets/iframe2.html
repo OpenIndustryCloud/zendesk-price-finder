@@ -1,0 +1,59 @@
+<html>
+<head>
+ <meta charset="utf-8">
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ <script src="https://cdn.jsdelivr.net/jquery/3.2.1/jquery.min.js"></script>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ 
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/sha256.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/hmac.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/enc-base64.min.js"></script>
+ 
+
+ <link href="main.css" rel="stylesheet">
+</head>
+<body class="wrapper">
+  <div id="content"></div>
+  
+    <script id="requester-template" type="text/x-handlebars-template">
+	<div class="tab-content">
+		<div id="RenderedSection" class="tab-pane fade active in">
+			<div id="RenderedResponseDiv" class="well-R">
+			<div class="mohit">View products</div>
+			<!--{{#each myArray}}-->
+				<div class="row product-box">
+					<div class="col-xs-6">
+						<a target="_blank" href="{{selectedProd.itemPageUrl}}">
+							<img src="{{selectedProd.itemImage}}" width="115" height="100" style="padding-left:10px">
+						</a>
+						<p class="product-price">{{selectedProd.itemPrice}}<br>
+						{{#if selectedProd.moreOffersExist}}
+							<a target="_blank" href="{{itemMoreOffersUrl}}"> More offers 
+							</a>
+						{{/if}}	
+						</p>
+					</div>
+					<div class="col-xs-6">
+						<div class="product-title">
+							<h3>{{selectedProd.itemTitle}}</h3>
+						</div>						
+					</div>
+				</div>
+			<!--{{else}}
+				<div>
+					<div class="progress" style="height:60px">
+						<div class="progress-bar" role="progressbar" style="padding:18px;font-size:13px;width: 100%;background-color:grey;height:60px" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">Product cannot be found on Amazon</div>
+					</div>
+				</div>				
+			{{/each}}-->
+			</div>
+		</div>
+	</div>	
+	</script>
+  <script src="https://cdn.jsdelivr.net/handlebarsjs/4.0.8/handlebars.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://assets.zendesk.com/apps/sdk/2.0/zaf_sdk.js"></script>
+  <script type="text/javascript" src="main2.js"></script>
+</body>
+</html>
